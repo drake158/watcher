@@ -41,15 +41,15 @@
 
 **Limitación**: `requestAnimationFrame` es pre-repaint, puede reducir frecuencia en pestañas en segundo plano y no prueba que el compositor haya presentado el frame físicamente. `performance.now()` al terminar el dibujo define una métrica reproducible de aplicación; no equivale a latencia de fotón.
 
-**SC-013**: una señal de diagnóstico in-memory se programa con `AudioBufferSourceNode` y sample index conocido hacia el mismo analizador/render loop del producto. Pares locales de `AudioContext.currentTime` y `performance.now()` calibran el reloj fuente; `getOutputTimestamp()` queda como observación secundaria porque reporta timing de salida de audio. Cada renderer emite una firma de valores realmente entregados a dibujo. Oráculos y evidencia por modo están detallados en `plan.md`/`data-model.md`; son propuestas no validadas.
+**SC-013**: calentar durante 10 s el mismo analizador/render loop con sweep; detener y aislar esa fuente; luego programar una señal in-memory por `AudioBufferSourceNode` como única entrada. Diagnóstico fijo `fftSize=8192`, `smoothingTimeConstant=0`, registro de sampleRate y reloj local AudioContext/performance. Capturar cada `drawCompletedAt`, separar firma de comandos de raster readback real por ROI, y correr A/B con y sin pixel readback para reportar overhead. El protocolo y firmas por modo están en `plan.md`/`data-model.md`; validación raster y overhead siguen pendientes, y 250 ms no es un resultado validado. `getOutputTimestamp()` es observación secundaria de salida.
 
 **Fuentes**: [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame), [getOutputTimestamp](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/getOutputTimestamp).
 
 ## Decisión: GitHub Pages por Actions y ruta base explícita
 
-**Elegido**: build `dist/`, Pages source = GitHub Actions; definir `base` como `/<repo>/` en repositorio de proyecto y `/` en sitio de usuario/org. Workflow con build y deploy jobs, artifact estático y permisos restringidos por job. Acciones fijadas a SHA revisado; solo `GITHUB_TOKEN` integrado, sin PAT ni secretos.
+**Elegido**: repositorio público aprobado; build `dist/`, Pages source = GitHub Actions; definir `base` como `/<repo>/` en repositorio de proyecto y `/` en sitio de usuario/org. Workflow con build y deploy jobs, artifact estático y permisos restringidos por job. Solo la rama predeterminada puede desplegar, incluidas ejecuciones `workflow_dispatch`; environment Pages restringido a esa rama. Acciones fijadas a SHA revisado; solo `GITHUB_TOKEN` integrado, sin PAT ni secretos.
 
-**Razones**: Vite documenta que el sitio de proyecto necesita base subpath y un workflow para construir el sitio. El flujo oficial de Pages publica artifacts estáticos usando `configure-pages`, `upload-pages-artifact` y `deploy-pages`. GitHub describe los permisos `pages: write`/`id-token: write` para deploy, y los permisos deben concederse solo al trabajo que los necesita. GitHub Free ofrece Pages gratis para repositorios públicos; esta condición de visibilidad debe confirmarse.
+**Razones**: Vite documenta que el sitio de proyecto necesita base subpath y un workflow para construir el sitio. El flujo oficial de Pages publica artifacts estáticos usando `configure-pages`, `upload-pages-artifact` y `deploy-pages`. GitHub describe los permisos `pages: write`/`id-token: write` para deploy, y los permisos deben concederse solo al trabajo que los necesita. GitHub Free ofrece Pages gratis para repositorios públicos; el usuario aprobó esa visibilidad.
 
 **Alternativas consideradas**: publicar `dist` por token personal a una rama `gh-pages` aumenta privilegios y requiere secreto; usar Netlify/Vercel u otro host cambia el requisito de Pages y puede introducir límites/tier; dominio propio es opcional y no es necesario.
 
@@ -69,9 +69,9 @@
 
 **Razones**: reduce fuga de red, costo de bundle y dependencia externa. El lockfile y `npm ci` fijan el grafo usado por CI.
 
-## Resumen de investigación no resuelto
+## Decisiones aprobadas y verificaciones pendientes
 
-- Aprobación del umbral de contraste propuesto en spec; no sustituirlo con una decisión técnica implícita.
-- Confirmación de que el repositorio puede ser público y por tanto elegible para GitHub Pages sin costo en GitHub Free.
-- Validación real de los oráculos SC-013 y medición de costos/overhead de instrumentación; las fuentes confirman API disponible, no su validez en WATCHER.
+- Contraste aprobado: 4.5:1 normal y 3:1 grande/no-texto relevante donde WCAG 2.2 aplica. Repositorio público y Pages estático gratuito aprobados.
+- Defaults aprobados: sensibilidad 50, balanced, color 60, movimiento 35, intensidad de efectos 45. Estos son estados iniciales configurables, no topes.
+- Sigue pendiente validar los oráculos raster SC-013 en el canvas real, medir y documentar overhead A/B, y registrar resultados; la fuente técnica confirma propiedades de API, no validez de una implementación WATCHER.
 - La compatibilidad móvil debe verificarse en Safari/Chrome reales; WebKit automatizado no demuestra Safari.

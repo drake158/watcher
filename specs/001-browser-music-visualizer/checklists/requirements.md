@@ -14,8 +14,8 @@
 ## Requirement Completeness
 
 - [x] No [NEEDS CLARIFICATION] markers remain
-- [ ] Requirements are testable and unambiguous
-- [ ] Success criteria are measurable
+- [x] Requirements are testable and unambiguous
+- [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
 - [x] All acceptance scenarios are defined
 - [x] Edge cases are identified
@@ -31,6 +31,6 @@
 
 ## Notes
 
-- Audit status (2026-10-26): 13/16 criteria are checked. The unchecked criteria are requirements testability and unambiguity, measurable success criteria, and evidence that the feature meets its measurable outcomes. SC-013 requires a Plan-defined and validated per-mode response oracle and instrumentation before its latency threshold can be scored; this specification audit provides no implementation or runtime evidence for any outcome.
-- Reassess the unchecked criteria when the SC-013 instrumentation is defined and implementation verification provides evidence. This checklist status does not claim that performance, browser compatibility, latency, accessibility, privacy, or deployment has passed.
+- Audit status (2026-10-26): 15/16 criteria are checked. Requirements and criteria are now specified with observable scenarios, approved visual defaults/contrast targets, and a per-mode SC-013 command-signature plus raster-output procedure. The sole unchecked item is evidence that the feature meets its measurable outcomes: no implementation/runtime evidence exists. SC-013 oracle validation and diagnostic-overhead measurement remain pending; the 250 ms target is not reported as validated.
+- Reassess the remaining item after implementing and recording verification. This checklist does not claim that performance, browser compatibility, latency, accessibility, privacy, or deployment has passed.
 
