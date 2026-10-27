@@ -1,0 +1,25 @@
+# Node.js and Vite
+node_modules/
+dist/
+build/
+coverage/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Local environment values and generated reports
+.env*
+!.env.example
+playwright-report/
+test-results/*
+!test-results/SC-001-browser-matrix.md
+!test-results/SC-002-participant-records.md
+
+# Operating systems and editors
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/

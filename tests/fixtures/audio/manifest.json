@@ -1,0 +1,75 @@
+{
+  "corpus": "WATCHER synthetic audio compatibility fixtures",
+  "generatedFromCopyrightedAudio": false,
+  "sampleRateHz": 44100,
+  "channels": 2,
+  "bitDepth": 16,
+  "pcmGenerator": "Node.js v24.21.0; deterministic integer PCM generator",
+  "mp3Encoder": {
+    "name": "FFmpeg libmp3lame",
+    "version": "ffmpeg version 9.0.2-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers"
+  },
+  "fixtures": [
+    {
+      "filename": "tone.wav",
+      "durationSeconds": 10,
+      "encoding": "stereo signed 16-bit PCM WAV",
+      "sampleRateHz": 44100,
+      "expectedResult": "playable; reports 10 seconds within 0.02 seconds",
+      "recipe": "440 Hz sine tone at -12 dBFS duplicated in both channels",
+      "sizeBytes": 1764044,
+      "sha256": "002fb354f0d527bddd4dc5fbd1354ac95bd6aa8030d6ee555f6bfc2841de9cfe"
+    },
+    {
+      "filename": "sweep.wav",
+      "durationSeconds": 10,
+      "encoding": "stereo signed 16-bit PCM WAV",
+      "sampleRateHz": 44100,
+      "expectedResult": "playable; reports 10 seconds within 0.02 seconds",
+      "recipe": "linear 110 Hz to 880 Hz sine sweep at -12 dBFS",
+      "sizeBytes": 1764044,
+      "sha256": "011bb3f67c07e672fa736c251b4a1ebed3755a9092e66cbbdbcb5e0395a0971d"
+    },
+    {
+      "filename": "tone.mp3",
+      "durationSeconds": 10,
+      "encoding": "stereo MPEG-1 Layer III, 128 kbps CBR",
+      "sampleRateHz": 44100,
+      "expectedResult": "playable; reports 10 seconds within 0.2 seconds",
+      "recipe": "encoded from synthetic tone.wav using libmp3lame",
+      "sizeBytes": 160496,
+      "sha256": "89fc6395bd036495cf9b7c4fc7e0b3f02ffe38ab77d3913b1cc14bf875341cf6"
+    },
+    {
+      "filename": "sweep.mp3",
+      "durationSeconds": 10,
+      "encoding": "stereo MPEG-1 Layer III, 128 kbps CBR",
+      "sampleRateHz": 44100,
+      "expectedResult": "playable; reports 10 seconds within 0.2 seconds",
+      "recipe": "encoded from synthetic sweep.wav using libmp3lame",
+      "sizeBytes": 160496,
+      "sha256": "ca28f98599caa9645c68d91ed629cbbeffccc04d9733048939b544beb46bb61f"
+    },
+    {
+      "filename": "truncated.wav",
+      "durationSeconds": null,
+      "encoding": "first 20 bytes of stereo signed 16-bit PCM WAV",
+      "sampleRateHz": 44100,
+      "expectedResult": "unreadable; valid selected tracks remain usable",
+      "recipe": "first 20 bytes of tone.wav",
+      "sizeBytes": 20,
+      "sha256": "38ecc4e55bf9e3bf02409cd77ee4af21d22459e53c335052cb9d05272b312f5e"
+    },
+    {
+      "filename": "unsupported.txt",
+      "durationSeconds": null,
+      "encoding": "UTF-8 plain text",
+      "sampleRateHz": null,
+      "expectedResult": "unsupported; valid selected tracks remain usable",
+      "recipe": "WATCHER unsupported audio fixture",
+      "sizeBytes": 33,
+      "sha256": "601b1692639e7ecef46621baa82425be8b47450656645b03bd805905002959dd"
+    }
+  ],
+  "zeroByteSupplementalCase": "Not included in this six-file corpus; create a separate zero-byte File during the test."
+}

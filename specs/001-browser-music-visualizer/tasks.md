@@ -11,10 +11,10 @@
 
 **Purpose**: Create the smallest reproducible static TypeScript project and its development tooling.
 
-- [ ] T001 Initialize the Vite 8 vanilla TypeScript project with Node.js 24 LTS metadata and npm scripts in `package.json`, `package-lock.json`, `.nvmrc`, and `index.html`.
-- [ ] T002 Configure strict TypeScript checking, Vite static output to `dist/`, the browser syntax target for the oldest supported release, and `VITE_BASE_PATH` handling in `tsconfig.json` and `vite.config.ts`.
-- [ ] T003 Review licenses, maintenance, security advisories, and bundle impact; then add only approved test-only dependencies and configure Vitest, Playwright, and accessibility checks in `package.json`, `package-lock.json`, `vitest.config.ts`, `playwright.config.ts`, and `tests/setup.ts`.
-- [ ] T004 Create the planned source, test, fixture, script, and workflow directories with a minimal application entry point in `src/main.ts` and `src/app/AppController.ts`; leave the user-facing shell to T009.
+- [X] T001 Initialize the Vite 8 vanilla TypeScript project with Node.js 24 LTS metadata and npm scripts in `package.json`, `package-lock.json`, `.nvmrc`, and `index.html`.
+- [X] T002 Configure strict TypeScript checking, Vite static output to `dist/`, the browser syntax target for the oldest supported release, and `VITE_BASE_PATH` handling in `tsconfig.json` and `vite.config.ts`.
+- [X] T003 Review licenses, maintenance, security advisories, and bundle impact; then add only approved test-only dependencies and configure Vitest, Playwright, and accessibility checks in `package.json`, `package-lock.json`, `vitest.config.ts`, `playwright.config.ts`, and `tests/setup.ts`.
+- [X] T004 Create the planned source, test, fixture, script, and workflow directories with a minimal application entry point in `src/main.ts` and `src/app/AppController.ts`; leave the user-facing shell to T009.
 
 ---
 
@@ -22,11 +22,11 @@
 
 **Purpose**: Establish shared domain state, settings persistence, and reproducible lawful test inputs before story work.
 
-- [ ] T005 [P] Write settings persistence tests for defaults, clamping, invalid JSON, unsupported schema versions, and unavailable storage in `tests/unit/SettingsRepository.spec.ts`; run them and confirm expected failures before implementing the repository.
-- [ ] T006 [P] Define shared `TrackEntry`, `PlaybackSession`, `AudioFeatures`, `VisualMode`, settings, and application state types in `src/domain/models.ts`, `src/domain/audioFeatures.ts`, `src/domain/settings.ts`, and `src/app/appState.ts`; track IDs are unique per selection occurrence, durations are finite positive values or null, and track content remains session-local.
-- [ ] T007 Implement and persist the approved settings in `src/persistence/SettingsRepository.ts`: sensitivity 50/100, focus `balanced` with equal bass/mid/treble weights, color 60/100, motion 35/100, effect intensity 45/100; numeric controls accept 0–100 and no audio file, track name, Blob, or object URL is persisted.
-- [ ] T008 [P] Create the deterministic audio fixture generator and manifest in `scripts/generate-audio-fixtures.mjs` and `tests/fixtures/audio/manifest.json`; generate the six approved fixtures only from the documented synthetic recipes, record encoder/version and SHA-256, and keep the supplemental zero-byte input separate from the six-file corpus.
-- [ ] T009 Implement the semantic application shell, live status region, and shared control layout in `src/ui/AppView.ts`, `src/styles/layout.css`, and `src/styles/visualizer.css`; keep playback and status controls outside the canvas.
+- [X] T005 [P] Write settings persistence tests for defaults, clamping, invalid JSON, unsupported schema versions, and unavailable storage in `tests/unit/SettingsRepository.spec.ts`; run them and confirm expected failures before implementing the repository.
+- [X] T006 [P] Define shared `TrackEntry`, `PlaybackSession`, `AudioFeatures`, `VisualMode`, settings, and application state types in `src/domain/models.ts`, `src/domain/audioFeatures.ts`, `src/domain/settings.ts`, and `src/app/appState.ts`; track IDs are unique per selection occurrence, durations are finite positive values or null, and track content remains session-local.
+- [X] T007 Implement and persist the approved settings in `src/persistence/SettingsRepository.ts`: sensitivity 50/100, focus `balanced` with equal bass/mid/treble weights, color 60/100, motion 35/100, effect intensity 45/100; numeric controls accept 0–100 and no audio file, track name, Blob, or object URL is persisted.
+- [X] T008 [P] Create the deterministic audio fixture generator and manifest in `scripts/generate-audio-fixtures.mjs` and `tests/fixtures/audio/manifest.json`; generate the six approved fixtures only from the documented synthetic recipes, record encoder/version and SHA-256, and keep the supplemental zero-byte input separate from the six-file corpus.
+- [X] T009 Implement the semantic application shell, live status region, and shared control layout in `src/ui/AppView.ts`, `src/styles/layout.css`, and `src/styles/visualizer.css`; keep playback and status controls outside the canvas.
 
 **Checkpoint**: Project builds as a static site, shared state/settings types are stable, and the six compatibility fixtures can be generated without copyrighted audio.
 
@@ -40,18 +40,20 @@
 
 **Requirements**: FR-001–006, FR-010–011, FR-022; AS-001–009; SC-001–002.
 
-- [ ] T010 [P] [US1] Write import/library tests for repeated selection IDs, same-name entries, removal of only one duplicate, zero-byte categorization, cancellation, and preservation of valid tracks in `tests/unit/AudioLibrary.spec.ts`; run them and confirm expected failures before implementation.
-- [ ] T011 [P] [US1] Write playback tests for play/pause/seek/volume, ended state, unknown duration, rejected play, decode failure, active-track removal, and object URL release in `tests/integration/PlaybackEngine.spec.ts`; run them and confirm expected failures before implementation.
-- [ ] T012 [US1] Implement `AudioLibrary` in `src/audio/AudioLibrary.ts`; add one `TrackEntry` per selection occurrence, reject `File.size === 0` as `invalid/unreadable audio` before allocating playback resources, and never impose a positive minimum file size or fixed playlist cap.
-- [ ] T013 [US1] Implement the single-active-track media graph in `src/audio/PlaybackEngine.ts` and `src/audio/AudioGraph.ts`; use one `HTMLAudioElement`, connect `MediaElementAudioSourceNode → AnalyserNode → GainNode → destination`, handle user-gesture resume/play failures, and revoke the active object URL on switch/removal/dispose.
-- [ ] T014 [US1] Implement the file picker, track list, distinct entry actions, and application-defined unsupported/unreadable error messages in `src/ui/TrackListView.ts`; render file names as text and preserve usable entries when another file fails.
-- [ ] T015 [US1] Implement play, pause, seek, volume, playback state, elapsed time, duration, progress, ended state, and safe unknown-duration behavior in `src/ui/PlayerView.ts` and `src/audio/PlaybackEngine.ts`.
-- [ ] T016 [US1] Implement reusable time-domain audio features and the baseline waveform renderer in `src/visual/features.ts`, `src/visual/CanvasRenderer.ts`, and `src/visual/modes/waveform.ts`; reuse typed arrays and keep controls/status in semantic HTML.
-- [ ] T017 [US1] Connect library, playback engine, waveform renderer, player controls, and empty/error states in `src/app/AppController.ts` and `src/main.ts`; prepare only the active track and keep other entries when browser resources fail.
+- [X] T010 [P] [US1] Write import/library tests for repeated selection IDs, same-name entries, removal of only one duplicate, zero-byte categorization, cancellation, and preservation of valid tracks in `tests/unit/AudioLibrary.spec.ts`; run them and confirm expected failures before implementation.
+- [X] T011 [P] [US1] Write playback tests for play/pause/seek/volume, ended state, unknown duration, rejected play, decode failure, active-track removal, and object URL release in `tests/integration/PlaybackEngine.spec.ts`; run them and confirm expected failures before implementation.
+- [X] T012 [US1] Implement `AudioLibrary` in `src/audio/AudioLibrary.ts`; add one `TrackEntry` per selection occurrence, reject `File.size === 0` as `invalid/unreadable audio` before allocating playback resources, and never impose a positive minimum file size or fixed playlist cap.
+- [X] T013 [US1] Implement the single-active-track media graph in `src/audio/PlaybackEngine.ts` and `src/audio/AudioGraph.ts`; use one `HTMLAudioElement`, connect `MediaElementAudioSourceNode → AnalyserNode → GainNode → destination`, handle user-gesture resume/play failures, and revoke the active object URL on switch/removal/dispose.
+- [X] T014 [US1] Implement the file picker, track list, distinct entry actions, and application-defined unsupported/unreadable error messages in `src/ui/TrackListView.ts`; render file names as text and preserve usable entries when another file fails.
+- [X] T015 [US1] Implement play, pause, seek, volume, playback state, elapsed time, duration, progress, ended state, and safe unknown-duration behavior in `src/ui/PlayerView.ts` and `src/audio/PlaybackEngine.ts`.
+- [X] T016 [US1] Implement reusable time-domain audio features and the baseline waveform renderer in `src/visual/features.ts`, `src/visual/CanvasRenderer.ts`, and `src/visual/modes/waveform.ts`; reuse typed arrays and keep controls/status in semantic HTML.
+- [X] T017 [US1] Connect library, playback engine, waveform renderer, player controls, and empty/error states in `src/app/AppController.ts` and `src/main.ts`; prepare only the active track and keep other entries when browser resources fail.
 - [ ] T018 [US1] Run SC-001 with the six fixtures plus a separately generated zero-byte WAV across the specified desktop/mobile browser matrix; record per-browser/per-input outcome, filename/category, retry/remove, playback, and retained valid entries in `test-results/SC-001-browser-matrix.md`.
 - [ ] T019 [US1] Conduct SC-002 with 10 first-time participants using the identical tone import/play task and record each duration and assistance outcome in `test-results/SC-002-participant-records.md`; do not claim the 9/10 threshold without records.
 
 **Checkpoint**: Story 1 works independently and all nine AS-001–AS-009 flows have reproducible evidence or an explicit pending result.
+
+**User-authorized skips (2026-10-27)**: T018 and T019 are intentionally skipped at the user's request and remain unchecked. SC-001 and SC-002 remain pending as recorded in `test-results/SC-001-browser-matrix.md` and `test-results/SC-002-participant-records.md`; skipping is not a passing result.
 
 ---
 
@@ -63,7 +65,7 @@
 
 **Requirements**: FR-006–009, FR-018–020; AS-010–015; SC-003–004, SC-010–011, SC-013.
 
-- [ ] T020 [P] [US2] Write tests for mode identity, five adjustment effects, four editable presets, persistence of the approved defaults, and raster response checks in `tests/visual/modes.spec.ts` and `tests/unit/visual-settings.spec.ts`; run them and confirm expected failures before implementing the remaining modes.
+- [X] T020 [P] [US2] Write tests for mode identity, five adjustment effects, four editable presets, persistence of the approved defaults, and raster response checks in `tests/visual/modes.spec.ts` and `tests/unit/visual-settings.spec.ts`; run them and confirm expected failures before implementing the remaining modes.
 - [ ] T021 [P] [US2] Write SC-013 diagnostic tests for 20 sample-indexed events, clock residual rejection above 5 ms, isolated source input, two-frame confirmation, command-signature plus raster-oracle gating, and local evidence export in `tests/performance/SC-013.spec.ts`; run them and confirm expected failures before implementing the probe.
 - [ ] T022 [P] [US2] Write SC-010 tests for three consecutive one-second windows below 30 completed frames, fallback notification, four-second trigger deadline, ten seconds of sustained artificial load after trigger, and load removal on timeout/abort in `tests/performance/SC-010.spec.ts`; run them and confirm expected failures before implementing the harness.
 - [ ] T023 [US2] Implement frequency/time feature extraction and documented bass/mid/treble boundaries in `src/visual/features.ts`; use the approved balanced focus weights equally across the three bands and document the sensitivity 0–100 mapping in the same module.

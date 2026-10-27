@@ -1,0 +1,308 @@
+:root {
+  color-scheme: dark;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  background: #100e19;
+  color: #f6f3ff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: #100e19;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 50% -20%, rgb(111 67 161 / 22%), transparent 58%),
+    linear-gradient(145deg, #14111f 0%, #0d0c14 68%, #15101d 100%);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid #7ce8ef;
+  outline-offset: 3px;
+}
+
+.watcher-shell {
+  width: min(100% - 2rem, 76rem);
+  min-height: 100vh;
+  margin-inline: auto;
+  padding-block: clamp(1rem, 4vw, 3rem) 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+.masthead,
+.panel-heading,
+.status-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand-lockup {
+  min-width: 0;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #b8d9ef;
+  font-family: "Courier New", monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.brand-title {
+  margin: 0.1rem 0 0;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  line-height: 0.98;
+}
+
+.brand-subtitle {
+  margin: 0.5rem 0 0;
+  color: #e5def2;
+  font-size: 0.95rem;
+}
+
+.system-status,
+.standby-badge,
+.deck-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  white-space: nowrap;
+  font-family: "Courier New", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  flex: 1;
+}
+
+.panel {
+  min-width: 0;
+  padding: clamp(0.9rem, 2vw, 1.4rem);
+  border-radius: 1rem;
+}
+
+.visualizer-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.panel-heading {
+  min-height: 2.5rem;
+}
+
+.panel-title {
+  margin: 0.25rem 0 0;
+  font-size: 1.1rem;
+  letter-spacing: 0.035em;
+}
+
+.player-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.empty-state {
+  min-height: 10rem;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  padding: 1rem;
+  text-align: center;
+}
+
+.empty-state-title {
+  margin: 0.35rem 0 0;
+  font-size: 1rem;
+}
+
+.empty-state-copy {
+  max-width: 34ch;
+  margin: 0.5rem 0 0;
+  line-height: 1.55;
+}
+
+.live-status {
+  min-height: 2.75rem;
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  align-items: center;
+  line-height: 1.4;
+}
+
+.control-deck {
+  min-height: 3.5rem;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.controls-hint {
+  margin: 0;
+  line-height: 1.45;
+}
+
+.track-list-slot,
+.track-library,
+.playback-controls {
+  min-width: 0;
+}
+
+.track-library {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.subsection-title {
+  margin: 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+.track-list {
+  display: grid;
+  gap: 0.45rem;
+  max-height: 14rem;
+  overflow: auto;
+  margin: 0;
+  padding: 0.1rem;
+  list-style: none;
+}
+
+.track-entry {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 0.45rem;
+}
+
+.track-select {
+  min-width: 0;
+  display: grid;
+  gap: 0.25rem;
+  text-align: left;
+}
+
+.track-name {
+  overflow-wrap: anywhere;
+}
+
+.track-meta {
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.playback-controls {
+  width: 100%;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.transport-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.range-label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+}
+
+.range-input {
+  width: 100%;
+  min-height: 2rem;
+  accent-color: #81f1ef;
+}
+
+.time-readout {
+  font-family: "Courier New", monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.now-playing-name {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-weight: 700;
+}
+
+.status-footer {
+  flex-wrap: wrap;
+  color: #ded8e9;
+  font-family: "Courier New", monospace;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+}
+
+@media (min-width: 54rem) {
+  .workspace {
+    grid-template-columns: minmax(0, 1.7fr) minmax(17rem, 0.9fr);
+    align-items: stretch;
+  }
+
+  .visualizer-panel,
+  .player-panel {
+    min-height: 34rem;
+  }
+
+  .player-panel {
+    justify-content: flex-start;
+  }
+
+  .empty-state {
+    flex: 1;
+  }
+}
+
+@media (max-width: 25rem) {
+  .watcher-shell {
+    width: min(100% - 1.25rem, 76rem);
+  }
+
+  .system-status {
+    font-size: 0.62rem;
+  }
+
+  .status-footer {
+    font-size: 0.58rem;
+  }
+}

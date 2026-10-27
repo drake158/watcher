@@ -99,7 +99,7 @@ Los criterios ROI usan canvas CSS normalizado (misma zona relativa por modo) y c
 - Layout CSS responsivo, controles nativos `button`, `input range`/select con `<label>`, nombres accesibles, `aria-pressed` o estado equivalente, valores anunciados sin anuncios por frame, foco visible y orden lógico de teclado. Canvas no será el único portador de estado ni recibirá foco; anunciar modo, play state y progreso en elementos HTML.
 - `prefers-reduced-motion: reduce` y control de movimiento limitan desplazamientos, partículas y transiciones; conservar cambios de amplitud/frecuencia legibles. No usar parpadeo estroboscópico. El loop se detiene al pausar o esconder pestaña y no altera reproducción.
 - Diseño Y2K propio: tipografía display autoalojada/licencia revisada o stacks locales, tipografía de controles legible, marcos cromados/bevel, textura CRT de bajo costo, cuatro presets modificables y estructuras visuales distintas. No copiar logos/assets de Winamp/WMP. El overlay visual nunca cubrir controles ni degradar contraste.
-- Medir WCAG para cada preset y viewport. La spec propone 4.5:1 texto normal, 3:1 texto grande/no-texto; no se tratan como acuerdo final mientras la clarificación está pendiente.
+- Medir WCAG para cada preset y viewport. La spec aprueba al menos 4,5:1 para texto normal y 3:1 para texto grande y elementos no textuales relevantes donde aplica WCAG 2.2; verificar esos objetivos con informe automatizado y revisión manual.
 
 ### Privacidad, seguridad y dependencias
 
@@ -194,7 +194,7 @@ No hay decisiones de producto pendientes sobre visibilidad del repo, contraste o
 - Reproducir fixtures deterministas WAV/MP3, guardar licencia/receta, encoder/versión y SHA-256; ejecutar matriz de seis fixtures separada del Chrome 157 benchmark.
 - Confirmar importación y playback, HTML media state, volumen/seek, modos, presets y ajuste de controles; manejar cancelación, file errors, browser decode errors, playback rejection, faltante de duración y agotamiento de recursos.
 - Verificar SC-003 con logs por draw completado; SC-010 con harness test-only y log de fallback; SC-013 solo después de validar los cinco oráculos y el reloj. No usar screen recordings como contador de frames o cronómetro de latencia.
-- Revisar contraste automatizado por preset y revisar foco, teclado, lector de pantalla, reducción de movimiento y legibilidad manual. Resolver la ratificación WCAG antes de cerrar requisito.
+- Revisar contraste automatizado por preset contra los objetivos WCAG 2.2 aprobados (4,5:1 para texto normal; 3:1 para texto grande y elementos no textuales relevantes donde aplica), y revisar foco, teclado, lector de pantalla, reducción de movimiento y legibilidad manual. Mantener los resultados de verificación pendientes hasta medirlos.
 - Auditar solicitudes de red/permisos con el sitio cargado, archivos locales, conexión desconectada y refresco/reapertura separados; demostrar que audio nunca se envía y que no hay analítica/cuentas. No requerir offline reload.
 - Compilar la salida bajo el subpath del repo, inspeccionar asset URLs, abrir URL HTTPS limpia, recargar la página de entrada y revisar Actions permissions/artifact/tier. Confirmar que el repositorio es elegible para Pages gratuito.
 - Revisión visual humana debe documentar pass/revise con capturas para cada fila del checklist; ningún análisis automatizado sustituye autenticidad Y2K ni identidad de los cinco modos.
