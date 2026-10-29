@@ -46,7 +46,7 @@ Abre `http://127.0.0.1:4173/WATCHER/` para revisar esa compilación.
 
 El repositorio [drake158/watcher](https://github.com/drake158/watcher) contiene `.github/workflows/deploy.yml`. La acción instala las dependencias del lockfile, genera `dist/` con la ruta del repositorio y publica ese artefacto estático. Un `push` a la rama predeterminada despliega automáticamente. `workflow_dispatch` desde otra rama puede compilar, pero no puede desplegar. Las acciones externas están fijadas a SHA completos y el workflow usa permisos temporales de `GITHUB_TOKEN`; no necesita tokens personales ni secretos del repositorio.
 
-Configura el repositorio una vez:
+Configura el repositorio una vez::
 
 1. Usa un repositorio público elegible para GitHub Pages gratuito.
 2. En **Settings → Pages**, selecciona **GitHub Actions** como origen de publicación.
