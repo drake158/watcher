@@ -63,9 +63,11 @@ export class AppView {
       createElement("p", "eyebrow", "SIGNAL WINDOW 01"),
       title,
     );
+    const modeStatus = createElement("span", "standby-badge", "STANDBY");
+    modeStatus.id = "visualizer-state";
     heading.append(
       headingText,
-      createElement("span", "standby-badge", "STANDBY"),
+      modeStatus,
     );
 
     const screen = createElement("div", "visualizer-screen");
@@ -74,6 +76,7 @@ export class AppView {
     canvas.setAttribute("aria-hidden", "true");
     screen.append(canvas);
     const prompt = createElement("div", "screen-prompt");
+    prompt.id = "visualizer-prompt";
     prompt.setAttribute("aria-hidden", "true");
     prompt.append(
       createElement("span", "prompt-symbol", "✳"),
@@ -81,7 +84,18 @@ export class AppView {
       createElement("p", "prompt-caption", "SIGNAL OUTPUT WILL APPEAR HERE"),
     );
     screen.append(prompt);
-    section.append(heading, screen);
+    const settingsSlot = createElement("div", "settings-controls-slot");
+    settingsSlot.id = "settings-controls-slot";
+    const fallbackNotice = createElement(
+      "p",
+      "fallback-notice",
+      "Visual detail was reduced to keep playback controls responsive.",
+    );
+    fallbackNotice.id = "performance-fallback-notice";
+    fallbackNotice.setAttribute("role", "status");
+    fallbackNotice.setAttribute("aria-live", "polite");
+    fallbackNotice.hidden = true;
+    section.append(heading, screen, fallbackNotice, settingsSlot);
     return section;
   }
 

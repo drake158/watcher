@@ -94,7 +94,12 @@ export class PlayerView {
       Math.min(session.currentTimeSeconds, session.durationSeconds ?? 0),
     );
     this.seekOutput.textContent = `${formatTime(session.currentTimeSeconds)} / ${formatTime(session.durationSeconds)}`;
+    this.seekInput.setAttribute(
+      "aria-valuetext",
+      `${formatTime(session.currentTimeSeconds)} of ${formatTime(session.durationSeconds)}`,
+    );
     this.volumeInput.value = String(session.volume);
+    this.volumeInput.setAttribute("aria-valuetext", `${Math.round(session.volume * 100)}%`);
     this.trackName.textContent = name ?? "No track selected";
     if (this.status !== null) this.status.textContent = statusMessage;
   }

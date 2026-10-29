@@ -1,10 +1,13 @@
 import type { AudioFeatures } from "../../domain/audioFeatures";
+import { DEFAULT_RENDER_OPTIONS, type VisualRenderOptions } from "../renderOptions";
+import { resolvePaletteColor } from "../palette";
 
 export function drawWaveform(
   context: CanvasRenderingContext2D,
   features: AudioFeatures,
   width: number,
   height: number,
+  options: VisualRenderOptions = DEFAULT_RENDER_OPTIONS,
 ): void {
   const samples = features.timeDomain;
   const center = height / 2;
@@ -22,9 +25,9 @@ export function drawWaveform(
 
   if (samples.length === 0) return;
   const gradient = context.createLinearGradient(0, 0, width, height);
-  gradient.addColorStop(0, "#a4ffff");
-  gradient.addColorStop(0.5, "#ff7de9");
-  gradient.addColorStop(1, "#8c9aff");
+  gradient.addColorStop(0, resolvePaletteColor(options.selectedPresetId, 0, options.colorIntensity));
+  gradient.addColorStop(0.5, resolvePaletteColor(options.selectedPresetId, 180, options.colorIntensity));
+  gradient.addColorStop(1, resolvePaletteColor(options.selectedPresetId, 300, options.colorIntensity));
   context.beginPath();
   for (let index = 0; index < samples.length; index += 1) {
     const x = (index / (samples.length - 1)) * width;
@@ -34,8 +37,8 @@ export function drawWaveform(
   }
   context.strokeStyle = gradient;
   context.lineWidth = Math.max(2, width / 500);
-  context.shadowColor = "rgba(96, 242, 255, 0.72)";
-  context.shadowBlur = Math.min(18, width / 55);
+  context.shadowColor = resolvePaletteColor(options.selectedPresetId, 190, options.colorIntensity);
+  context.shadowBlur = Math.min(18, width / 55) * Math.min(1, options.effectIntensity / 100);
   context.stroke();
   context.shadowBlur = 0;
 }

@@ -15,6 +15,9 @@ playwright-report/
 test-results/*
 !test-results/SC-001-browser-matrix.md
 !test-results/SC-002-participant-records.md
+!test-results/SC-011-settings-persistence.md
+!test-results/SC-004/
+!test-results/SC-004/*.png
 
 # Operating systems and editors
 .DS_Store

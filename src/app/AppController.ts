@@ -4,7 +4,11 @@ import { PlaybackEngine } from "../audio/PlaybackEngine";
 import { PlayerView } from "../ui/PlayerView";
 import { TrackListView } from "../ui/TrackListView";
 import { CanvasRenderer } from "../visual/CanvasRenderer";
-import type { PlaybackSession, TrackId } from "../domain/models";
+import type { PlaybackSession, TrackId, VisualMode } from "../domain/models";
+import type { FrequencyFocus } from "../domain/settings";
+import { SettingsRepository } from "../persistence/SettingsRepository";
+import { SettingsView } from "../ui/SettingsView";
+import { applyVisualPreset, updateVisualSetting, type VisualSettingKey } from "../visual/settingEffects";
 
 export class AppController {
   constructor(private readonly root: HTMLElement) {}
@@ -19,12 +23,47 @@ export class AppController {
     const canvas = this.root.querySelector<HTMLCanvasElement>(
       "#visualizer-canvas",
     );
-    if (trackHost === null || controlsHost === null || canvas === null) {
+    const settingsHost = this.root.querySelector<HTMLElement>("#settings-controls-slot");
+    if (trackHost === null || controlsHost === null || canvas === null || settingsHost === null) {
       throw new Error("WATCHER player shell is missing required regions.");
     }
 
+    const settingsRepository = new SettingsRepository();
+    let visualSettings = settingsRepository.load();
+    let visualMode: VisualMode = "waveform";
     let engine: PlaybackEngine | null = null;
     let renderer: CanvasRenderer | null = null;
+    const settingsView = new SettingsView(settingsHost, {
+      onModeChange: (mode) => {
+        visualMode = mode;
+        renderer?.setMode(mode);
+        settingsView.render(visualMode, visualSettings);
+      },
+      onSettingChange: (key: VisualSettingKey, value: number | FrequencyFocus) => {
+        visualSettings = key === "frequencyFocus"
+          ? updateVisualSetting(visualSettings, key, value as FrequencyFocus)
+          : updateVisualSetting(visualSettings, key, Number(value));
+        settingsRepository.save(visualSettings);
+        renderer?.setVisualSettings(visualSettings);
+        settingsView.render(visualMode, visualSettings);
+      },
+      onPresetApply: (presetId) => {
+        visualSettings = applyVisualPreset(presetId);
+        settingsRepository.save(visualSettings);
+        renderer?.setVisualSettings(visualSettings);
+        settingsView.render(visualMode, visualSettings);
+      },
+    });
+    settingsView.mount();
+    const motionPreference = typeof window.matchMedia === "function"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)")
+      : null;
+    const updateMotionPreference = (): void => {
+      settingsView.setReducedMotionPreference(motionPreference?.matches ?? false);
+    };
+    updateMotionPreference();
+    motionPreference?.addEventListener("change", updateMotionPreference);
+    settingsView.render(visualMode, visualSettings);
     let statusMessage = "Player is idle.";
     let lastSession: PlaybackSession | null = null;
     const renderTracks = (): void => {
@@ -52,11 +91,45 @@ export class AppController {
       }
       player.render(session, active?.displayName ?? null, statusMessage);
 
+      const visualizerPrompt = this.root.querySelector<HTMLElement>("#visualizer-prompt");
+      const visualizerState = this.root.querySelector<HTMLElement>("#visualizer-state");
+      if (visualizerState !== null) {
+        visualizerState.textContent = session.state === "playing"
+          ? "LIVE SIGNAL"
+          : session.state === "paused"
+            ? "PAUSED"
+            : session.state === "ended"
+              ? "COMPLETE"
+              : session.state === "error"
+                ? "ERROR"
+                : "STANDBY";
+      }
+      if (visualizerPrompt !== null) {
+        visualizerPrompt.hidden = session.state === "playing";
+        const promptTitle = visualizerPrompt.querySelector<HTMLElement>(".prompt-title");
+        const promptCaption = visualizerPrompt.querySelector<HTMLElement>(".prompt-caption");
+        if (session.state === "paused") {
+          if (promptTitle !== null) promptTitle.textContent = "VISUALIZER PAUSED";
+          if (promptCaption !== null) promptCaption.textContent = "RESUME PLAYBACK TO CONTINUE";
+        } else if (session.state === "ended") {
+          if (promptTitle !== null) promptTitle.textContent = "TRACK COMPLETE";
+          if (promptCaption !== null) promptCaption.textContent = "SELECT ANOTHER TRACK TO VISUALIZE";
+        } else if (session.state === "error") {
+          if (promptTitle !== null) promptTitle.textContent = "VISUAL OUTPUT UNAVAILABLE";
+          if (promptCaption !== null) promptCaption.textContent = "CHECK THE PLAYER STATUS FOR DETAILS";
+        } else if (session.trackId === null) {
+          if (promptTitle !== null) promptTitle.textContent = "AWAITING LOCAL AUDIO";
+          if (promptCaption !== null) promptCaption.textContent = "SIGNAL OUTPUT WILL APPEAR HERE";
+        }
+      }
+
       const shouldAnimate = session.state === "playing";
       const wasAnimating = lastSession?.state === "playing";
       const changedTrack = lastSession?.trackId !== session.trackId;
       if (!shouldAnimate) renderer?.stop();
       else if (!wasAnimating || changedTrack) {
+        renderer?.setMode(visualMode);
+        renderer?.setVisualSettings(visualSettings);
         renderer?.start(engine!.graph.analyser);
       }
       lastSession = session;
@@ -122,7 +195,12 @@ export class AppController {
       onVolume: (volume) => engine?.setVolume(volume),
     });
     player.mount();
-    renderer = new CanvasRenderer(canvas);
+    const fallbackNotice = this.root.querySelector<HTMLElement>("#performance-fallback-notice");
+    renderer = new CanvasRenderer(canvas, () => {
+      if (fallbackNotice !== null) fallbackNotice.hidden = false;
+    });
+    renderer.setMode(visualMode);
+    renderer.setVisualSettings(visualSettings);
 
     try {
       engine = new PlaybackEngine();
